@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
+    <meta charset="UTF-8">
+    <meta name="title" content="Test Nuvei">
+    <meta name="description" content="Descripción de la WEB">
+    <title>Sample Nuvei API</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #3a4453;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 10px;
+                    }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 200px;
+            height: auto;
+        }
+        .container {
+            margin-left: 220px;
+            width: 1000px;
+            height: 500px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background-color: #081f2c;
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar li {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        li a {
+            display: block;
+            color: #000;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+        li a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+          .dropdown-menu {
+          display: none;
+        }
+
+        .dropdown.active .dropdown-menu {
+          display: block;
+          margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+    <ul>
+        <li><a href="welcome.html">Introduction</a></li>
+        <li><a href="sessionToken.html">Session Token</a></li>
+        <li><a href="openOrder.html">Open Order</a></li>
+        <li><a href="initPayment.html">Init Payment</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">Payment</a>
+          <ul class="dropdown-menu">
+            <li><a href="simpleCardRequest.html">Simple Card Request</a></li>
+            <li><a href="fullCardRequest.html">Full Card Request</a></li>
+            <li><a href="paymentAPM.html">Payment APM</a></li>
+            <li><a href="#">Otro</a></li>
+          </ul>
+        </li>
+        <li><a href="settleTransaction.html">Settle Transaction</a></li>
+        <li><a href="#">Refund Transaction</a></li>
+        <li><a href="#">Void Transaction</a></li>
+        <li><a href="#">Payout</a></li>
+        <li><a href="#">Get Payment Status</a></li>
+        <li><a href="#">Get Payout Status</a></li>
+        <li><a href="#">Account Capture</a></li>  
+
+    </ul>
+</div>
+    <div class="container">
+        <div class="logo">
+            <img src="https://cdn.paymentez.com/img/nv/nuvei_logo.png" alt="Nuvei Logo">
+        </div>
+
+        <h1>Welcome to the Nuvei API Reference Example</h1>
+
+        <p>If this is your first time visiting, we recommend you also visit our documentation portal.</p>
+
+        <p>Nuvei’s API is simple, easy-to-use, secure, and stateless, which enables online merchants and service providers to process consumer payments through Nuvei’s digital payment Gateway.</p>
+
+        <p>Using this API reduces the PCI burden from the merchant side. A merchant is only required to submit a SAQ A-EP form and perform periodical scans by Approved Scanning Vendors (ASV).</p>
+
+        <p>This API Reference Example will be helpuf to understand the API’s services and functionality, and is intended for developers by providing all necessary integration information, including the necessary requests and responses.</p>
+
+        <p>
+            REMEBER
+            It's just an example, do not distribute
+        </p>
+
+        <p>Developed by: Santiago Gómez Caicedo</p>
+
+    </div>
+    <script src="index.js" type="text/javascript"></script>
+</body>
+</html>

@@ -33,7 +33,7 @@
           </ul>
         </li>
         <li><a href="settleTransaction.html">Settle Transaction</a></li>
-        <li><a href="#">Refund Transaction</a></li>
+        <li><a href="refundTransation.html">Refund Transaction</a></li>
         <li><a href="#">Void Transaction</a></li>
         <li><a href="#">Payout</a></li>
         <li><a href="#">Get Payment Status</a></li>
@@ -48,14 +48,11 @@
     <div class='container'>
     <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png"> 
     <form>
-      <label for="sessionToken">Session Token:</label>
-      <input type="text" id="sessionToken" name="sessionToken" required>
+      <input type="text" id="sessionToken" name="sessionToken" placeholder="Session Token" required>
 
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount" required>
+      <input type="number" id="amount" name="amount" placeholder="Amount" required>
 
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
+      <input type="email" id="email" name="email" placeholder="Email" required>
 
       <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Session Token</title>
+    <title>Void Transaction</title>
     <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
     <meta charset="UTF-8">
     <meta name="title" content="Test Nuvei">
@@ -38,20 +38,20 @@
 <header>
 </header>
 <div class="container">
-    <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
+  <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
     <form>
-        
         <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret Key" required>
-   
-        <input type="text" id="sessionToken" name="sessionToken" placeholder="Session Token" required>
-
         <input type="text" id="merchant_id" name="merchant_id" placeholder="Merchant ID" required>
 
         <input type="text" id="merchant_site_id" name="merchant_site_id" placeholder="Merchant Site ID" required>
 
+        <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
+
         <input type="number" id="amount" name="amount" placeholder="Amount" required>
 
-        <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
+        <input type="text" id="relatedTransactionId" name="relatedTransactionId" placeholder="Related Transaction ID" required>
+
+        <input type="text" id="authCode" name="authCode" placeholder="Auth Code" required>
 
         <label for="currency">Currency:</label>
         <select id="currency">
@@ -64,26 +64,30 @@
 
         <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
+
+    
 </div>
-    <div id="result"></div>
+<div id="result"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
- 
+
 <script type="text/javascript">
 
 function obtenerDatos(){
-    document.getElementById('result').innerHTML = '';
 
-    var sessionToken = document.getElementById('sessionToken').value;
-    var amount = document.getElementById('amount').value;
-    var merchant_site_id = document.getElementById('merchant_site_id').value;
     var merchant_id = document.getElementById('merchant_id').value;
-    var merchant_secret_key = document.getElementById('merchant_secret_key').value;
+    var merchant_site_id = document.getElementById('merchant_site_id').value;
+    var merchant_secret_key =document.getElementById('merchant_secret_key').value;
     var client_request_id =document.getElementById('client_request_id').value;
+    var relatedTransactionId = document.getElementById('relatedTransactionId').value
     var currency = document.getElementById('currency').value;
+    var authCode = document.getElementById('authCode').value;
+    var client_unique_id = '12345';
+    var comment = 'comment';
+    var urlDetails = 'https://details.com';
 
-    if (!merchant_id || !merchant_site_id ||!sessionToken ||!amount ||!merchant_secret_key ||!client_request_id) {
+    if (!merchant_id || !merchant_site_id ||!merchant_secret_key ||!client_request_id ||!client_request_id ||!relatedTransactionId ||!currency ||!authCode) {
       alert("Por favor ingrese todos los campos");
       return;
     }
@@ -94,39 +98,23 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
   function padZero(valor) {
     return valor.toString().padStart(2, '0');
   }
-  
 
-  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + timestamp + merchant_secret_key);
+  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + client_unique_id + amount.toString() +currency + relatedTransactionId + authCode +comment + urlDetails + timestamp + merchant_secret_key);
   const checksum = cadena.toString();
- 
-  
+
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    
-  
+
     var raw = JSON.stringify({
-    "sessionToken":sessionToken,
-    "merchantId":merchant_id,
-    "merchantSiteId":merchant_site_id,
-    "userTokenId":"230811147",
-    "clientUniqueId":"12345",
-    "clientRequestId":client_request_id,
-    "amount":amount.toString(),
-    "currency":currency,
-    "paymentOption":{
-        "card":{
-            "cardNumber":"4000027891380961",
-            "cardHolderName":"John Smith",
-            "expirationMonth":"12",
-            "expirationYear":"2030",
-            "CVV":"217",
-            "threeD": { "methodNotificationUrl": "<methodNotificationURL>"
-            }
-        }
-    },
-    "deviceDetails":{
-        "ipAddress":"192.168.2.38"
-    }
+    "merchantId": merchant_id,
+    "merchantSiteId": merchant_site_id,
+    "clientRequestId": client_request_id,
+    "clientUniqueId": client_unique_id,
+    "amount": amount,
+    "currency": currency,
+    "relatedTransactionId": relatedTransactionId,
+    "timeStamp": timestamp,
+    "checksum": checksum
 });
   
     var requestOptions = {
@@ -136,12 +124,12 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       redirect: 'follow'
     };
   
-    fetch("https://ppp-test.nuvei.com/ppp/api/v1/initPayment.do", requestOptions)
+    fetch("https://ppp-test.nuvei.com/ppp/api/v1/voidTransaction.do", requestOptions)
       .then(response => response.json())
       .then(result => {
-        const session_token = result.sessionToken;
-        //document.getElementById('result').innerHTML = 'Session Token:' + session_token;
-        document.getElementById('result').innerHTML = JSON.stringify(result, null, 4);
+
+            const session_token = result.sessionToken;
+            document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
       })
       .catch(error => console.log('error', error));
 }

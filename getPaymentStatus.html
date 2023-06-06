@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Session Token</title>
+    <title>Get Payment Status</title>
     <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
     <meta charset="UTF-8">
     <meta name="title" content="Test Nuvei">
@@ -40,12 +40,7 @@
 <div class="container">
   <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
     <form>
-        <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret Key" required>
-        <input type="text" id="merchant_id" name="merchant_id" placeholder="Merchant ID" required>
-
-        <input type="text" id="merchant_site_id" name="merchant_site_id" placeholder="Merchant Site ID" required>
-
-        <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
+        <input type="text" id="sessionToken" name="sessionToken" placeholder="Session Token" required>
 
         <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
@@ -61,36 +56,19 @@
 
 function obtenerDatos(){
 
-    var merchant_id = document.getElementById('merchant_id').value;
-    var merchant_site_id = document.getElementById('merchant_site_id').value;
-    var merchant_secret_key =document.getElementById('merchant_secret_key').value;
-    var client_request_id =document.getElementById('client_request_id').value;
+    var sessionToken =document.getElementById('sessionToken').value;
 
-    if (!merchant_id || !merchant_site_id ||!merchant_secret_key ||!client_request_id) {
+    if (!sessionToken) {
       alert("Por favor ingrese todos los campos");
       return;
     }
-  
-const fecha = new Date();
-const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZero(fecha.getDate())}${padZero(fecha.getHours())}${padZero(fecha.getMinutes())}${padZero(fecha.getSeconds())}`;
-
-  function padZero(valor) {
-    return valor.toString().padStart(2, '0');
-  }
-
-  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + timestamp + merchant_secret_key);
-  const checksum = cadena.toString();
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
-    "merchantId": merchant_id,
-    "merchantSiteId": merchant_site_id,
-    "clientRequestId": client_request_id,
-    "timeStamp": timestamp,
-    "checksum": checksum
-    });
+    "sessionToken": sessionToken
+});
   
     var requestOptions = {
       method: 'POST',
@@ -99,13 +77,11 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       redirect: 'follow'
     };
   
-    fetch("https://ppp-test.nuvei.com/ppp/api/v1/getSessionToken.do", requestOptions)
+    fetch("https://ppp-test.nuvei.com/ppp/api/v1/getPaymentStatus.do", requestOptions)
       .then(response => response.json())
       .then(result => {
 
-            const session_token = result.sessionToken;
-            document.getElementById('result').innerHTML = 'Session Token: ' + session_token;
-            //document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
+          document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
       })
       .catch(error => console.log('error', error));
 }

@@ -111,7 +111,7 @@
           <option value="#">Bank</option>
           <option value="1022">Banco Union Colombiano</option>
         </select>
-        
+
 
     </div>
 
@@ -242,6 +242,11 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     raw.billingAddress.country ='PE';
     raw.userDetails.country ='PE';
 
+     if (!firstName || !lastName ) {
+      alert("Por favor ingrese todos los campos");
+      return;
+    }
+
   }
   else if (payment_method =='apmgw_PSE_PZ')
   {
@@ -259,6 +264,11 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     raw.paymentOption.alternativePaymentMethod.paymentez_bankCode = paymentez_bankCode;
     raw.billingAddress.country ='CO';
     raw.userDetails.country ='CO';
+
+     if (!paymentez_userName || !paymentez_userType ||!paymentez_userFisNumber ||!paymentez_fiscalNumber ||!paymentez_email ||!paymentez_bankCode) {
+      alert("Por favor ingrese todos los campos");
+      return;
+    }
     
 
   }
@@ -273,7 +283,10 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     raw.billingAddress.country ='MX';
     raw.userDetails.country ='MX';
     
-
+     if (!firstName || !lastName ||!email ) {
+      alert("Por favor ingrese todos los campos");
+      return;
+    }
 
   }
   else if (payment_method =='apmgw_Pago_Efectivo')
@@ -289,6 +302,10 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     raw.billingAddress.country ='MX';
     raw.userDetails.country ='MX';
 
+    if (!personal_id ||!firstName || !lastName ||!email ) {
+      alert("Por favor ingrese todos los campos");
+      return;
+    }
   }
 
   var nuevoJson = JSON.stringify(raw);

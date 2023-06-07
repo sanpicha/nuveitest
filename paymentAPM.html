@@ -88,11 +88,30 @@
     <div id="apmgw_PSE_PZ" style="display: none;">
 
       <input type="text" id="paymentez_userName" name="paymentez_userName" placeholder="User Name">
-      <input type="text" id="paymentez_userType" name="paymentez_userType" placeholder="User Type">
-      <input type="text" id="paymentez_userFisNumber" name="paymentez_userFisNumber" placeholder="User FisNumber">
+
+       <select id="paymentez_userType" >
+          <option value="#">User Type</option>
+          <option value="N">Natural</option>
+          <option value="J">Jurídica</option>
+        </select>
+
+        <select id="paymentez_userFisNumber" >
+          <option value="#">Type Fiscal</option>
+          <option value="CC">Cédula de ciudadanía</option>
+          <option value="CE">Cédula de extranjería</option>
+          <option value="NIT">Número de identificación tributario</option>
+          <option value="TI">Tarjeta de identidad</option>
+          <option value="PP">Pasaporte</option> 
+        </select>
+
       <input type="text" id="paymentez_fiscalNumber" name="paymentez_fiscalNumber" placeholder="Fiscal Number">
       <input type="text" id="paymentez_email" name="paymentez_email" placeholder="Email">
-      <input type="text" id="paymentez_bankCode" name="paymentez_bankCode" placeholder="Bank Code">
+
+      <select id="paymentez_bankCode" >
+          <option value="#">Bank</option>
+          <option value="1022">Banco Union Colombiano</option>
+        </select>
+        
 
     </div>
 

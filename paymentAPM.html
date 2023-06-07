@@ -59,7 +59,6 @@
 
         <input type="number" id="amount" name="amount" placeholder="Amount" required>
 
-        <input type="email" id="email" name="email" placeholder="Email" required>
         
         <label for="currency">Currency:</label>
         <select id="currency">
@@ -69,6 +68,52 @@
           <option value="PEN">PEN</option>
           <option value="USD">USD</option>
         </select>
+
+        <label for="payment_method">Payment Method:</label>
+        <select id="payment_method" onchange="showFields()">
+          <option value="#">Select</option>
+          <option value="apmgw_Safetypay">SafetyPay</option>
+          <option value="apmgw_PSE_PZ">PSE</option>
+          <option value="apmgw_Oxxo">Oxxo</option>
+          <option value="apmgw_Pago_Efectivo">Pago Efectivo</option>
+        </select>
+
+    <div id="apmgw_Safetypay" style="display: none;">
+
+      <input type="text" id="firstName" name="firstName" placeholder="First Name">  
+      <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+
+    </div>
+
+    <div id="apmgw_PSE_PZ" style="display: none;">
+
+      <input type="text" id="paymentez_userName" name="paymentez_userName" placeholder="User Name">
+      <input type="text" id="paymentez_userType" name="paymentez_userType" placeholder="User Type">
+      <input type="text" id="paymentez_userFisNumber" name="paymentez_userFisNumber" placeholder="User FisNumber">
+      <input type="text" id="paymentez_fiscalNumber" name="paymentez_fiscalNumber" placeholder="Fiscal Number">
+      <input type="text" id="paymentez_email" name="paymentez_email" placeholder="Email">
+      <input type="text" id="paymentez_bankCode" name="paymentez_bankCode" placeholder="Bank Code">
+
+    </div>
+
+    <div id="apmgw_Oxxo" style="display: none;">
+
+      <input type="text" id="firstName" name="firstName" placeholder="First Name">
+      <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+      <input type="text" id="email" name="email" placeholder="Email">
+
+    </div>
+
+    <div id="apmgw_Pago_Efectivo" style="display: none;">
+
+      <input type="text" id="personal_id" name="personal_id" placeholder="Personal ID">
+      <input type="text" id="firstName" name="firstName" placeholder="First Name">
+      <input type="text" id="lastName" name="lastName" placeholder="Last Name">
+      <input type="text" id="email" name="email" placeholder="Email">
+
+    </div>
+
+    
 
       <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
@@ -81,6 +126,31 @@
 
 <script type="text/javascript">
 
+  function showFields() {
+      var payment_method = document.getElementById("payment_method");
+      var selectedOption = payment_method.value;
+
+      var apmgw_Safetypay = document.getElementById("apmgw_Safetypay");
+      var apmgw_PSE_PZ = document.getElementById("apmgw_PSE_PZ");
+      var apmgw_Oxxo = document.getElementById("apmgw_Oxxo");
+      var apmgw_Pago_Efectivo = document.getElementById("apmgw_Pago_Efectivo");
+
+      apmgw_Safetypay.style.display = "none";
+      apmgw_PSE_PZ.style.display = "none";
+      apmgw_Oxxo.style.display = "none";
+      apmgw_Pago_Efectivo.style.display = "none";
+
+      if (selectedOption === "apmgw_Safetypay") {
+        apmgw_Safetypay.style.display = "block";
+      } else if (selectedOption === "apmgw_PSE_PZ") {
+        apmgw_PSE_PZ.style.display = "block";
+      } else if (selectedOption === "apmgw_Oxxo") {
+        apmgw_Oxxo.style.display = "block";
+      } else if (selectedOption === "apmgw_Pago_Efectivo") {
+        apmgw_Pago_Efectivo.style.display = "block";
+    }
+  }
+
 
 
 function obtenerDatos(){
@@ -91,10 +161,10 @@ function obtenerDatos(){
     var merchant_site_id = document.getElementById('merchant_site_id').value;
     var client_request_id = document.getElementById('client_request_id').value;
     var amount = document.getElementById('amount').value;
-    var email = document.getElementById('email').value;
     var currency = document.getElementById('currency').value;
+    var payment_method = document.getElementById('payment_method').value;
 
-    if (!sessionToken || !amount || !email) {
+    if (!sessionToken || !amount ||!merchant_secret_key ||!merchant_id ||!merchant_site_id ||!client_request_id) {
       alert("Por favor ingrese todos los campos");
       return;
     }
@@ -112,9 +182,8 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
   
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    
-  
-    var raw = JSON.stringify({
+
+    var raw = {
     "sessionToken":sessionToken,
     "merchantId":merchant_id,
     "merchantSiteId":merchant_site_id,
@@ -125,17 +194,13 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     "clientUniqueId":"12345",
     "paymentOption":{
         "alternativePaymentMethod":{
-            "paymentMethod":"apmgw_Safetypay",
-            "firstName":"Santiago",
-            "lastName":"Gomez",
-            "email":email
+            "paymentMethod":payment_method
         }
     },
     "billingAddress":{
         "firstName": "John",
         "lastName": "Smith",
-        "country":"PE",
-        "email":email
+        "email":"test@tes.com"
     },
     "deviceDetails":{
         "ipAddress":"192.168.2.38"
@@ -143,17 +208,78 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     "userDetails":{
         "firstName": "John",
         "lastName": "Smith",
-        "country":"PE",
-        "email":email
+        "email":"test@test.com"
   },
     "timeStamp":timestamp,
     "checksum":checksum
-});
-  
+};
+
+  if (payment_method == 'apmgw_Safetypay'){
+
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    raw.paymentOption.alternativePaymentMethod.firstName = firstName;
+    raw.paymentOption.alternativePaymentMethod.lastName = lastName;
+    raw.billingAddress.country ='PE';
+    raw.userDetails.country ='PE';
+
+  }
+  else if (payment_method =='apmgw_PSE_PZ')
+  {
+    var paymentez_userName = document.getElementById('paymentez_userName').value;
+    var paymentez_userType = document.getElementById('paymentez_userType').value;
+    var paymentez_userFisNumber = document.getElementById('paymentez_userFisNumber').value;
+    var paymentez_fiscalNumber = document.getElementById('paymentez_fiscalNumber').value;
+    var paymentez_email = document.getElementById('paymentez_email').value;
+    var paymentez_bankCode = document.getElementById('paymentez_bankCode').value;
+    raw.paymentOption.alternativePaymentMethod.paymentez_userName = paymentez_userName;
+    raw.paymentOption.alternativePaymentMethod.paymentez_userType = paymentez_userType;
+    raw.paymentOption.alternativePaymentMethod.paymentez_userFisNumber = paymentez_userFisNumber;
+    raw.paymentOption.alternativePaymentMethod.paymentez_fiscalNumber = paymentez_fiscalNumber;
+    raw.paymentOption.alternativePaymentMethod.paymentez_email = paymentez_email;
+    raw.paymentOption.alternativePaymentMethod.paymentez_bankCode = paymentez_bankCode;
+    raw.billingAddress.country ='CO';
+    raw.userDetails.country ='CO';
+    
+
+  }
+   else if (payment_method =='apmgw_Oxxo')
+  {
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    var email = document.getElementById('email').value;
+    raw.paymentOption.alternativePaymentMethod.firstName = firstName;
+    raw.paymentOption.alternativePaymentMethod.lastName = lastName;
+    raw.paymentOption.alternativePaymentMethod.email = email;
+    raw.billingAddress.country ='MX';
+    raw.userDetails.country ='MX';
+    
+
+
+  }
+  else if (payment_method =='apmgw_Pago_Efectivo')
+  {
+    var personal_id = document.getElementById('personal_id').value;
+    var firstName = document.getElementById('firstName').value;
+    var lastName = document.getElementById('lastName').value;
+    var email = document.getElementById('email').value;
+    raw.paymentOption.alternativePaymentMethod.personal_id = personal_id;
+    raw.paymentOption.alternativePaymentMethod.firstName = firstName;
+    raw.paymentOption.alternativePaymentMethod.lastName = lastName;
+    raw.paymentOption.alternativePaymentMethod.email = email;
+    raw.billingAddress.country ='MX';
+    raw.userDetails.country ='MX';
+    
+
+
+  }
+
+  var nuevoJson = JSON.stringify(raw);
+
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
-      body: raw,
+      body: nuevoJson,
       redirect: 'follow'
     };
   

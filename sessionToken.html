@@ -103,9 +103,17 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       .then(response => response.json())
       .then(result => {
 
-            const session_token = result.sessionToken;
+        if (result.status == 'SUCCESS'){
+           const session_token = result.sessionToken;
             document.getElementById('result').innerHTML = 'Session Token: ' + session_token;
             //document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
+        }else{
+
+          document.getElementById('result').innerHTML = 'Something went worng, review yours fields!';
+
+        }
+
+           
       })
       .catch(error => console.log('error', error));
 }

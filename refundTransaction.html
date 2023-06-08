@@ -48,8 +48,6 @@
 
         <input type="text" id="relatedTransactionId" name="relatedTransactionId" placeholder="Related Transaction ID" required>
 
-        <input type="text" id="authCode" name="authCode" placeholder="Auth Code" required>
-
         <input type="number" id="amount" name="amount" placeholder="Amount" required>
 
         <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
@@ -83,7 +81,6 @@ function obtenerDatos(){
     var merchant_site_id = document.getElementById('merchant_site_id').value;
     var relatedTransactionId = document.getElementById('relatedTransactionId').value;
     var amount = document.getElementById('amount').value;
-    var authCode = document.getElementById('authCode').value;
     var merchant_secret_key = document.getElementById('merchant_secret_key').value;
     var client_request_id = document.getElementById('client_request_id').value;
     var currency = document.getElementById('currency').value;
@@ -92,7 +89,7 @@ function obtenerDatos(){
     var urlDetails = '';
 
 
-    if (!merchant_id || !merchant_site_id ||!amount ||!relatedTransactionId ||!authCode) {
+    if (!merchant_id || !merchant_site_id ||!amount ||!relatedTransactionId  ||!merchant_secret_key ||!client_request_id ||!client_unique_id) {
       alert("Por favor ingrese todos los campos");
       return;
     }
@@ -104,7 +101,7 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     return valor.toString().padStart(2, '0');
   }
 
-  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + client_unique_id + amount.toString()+ currency+relatedTransactionId +authCode + comment + urlDetails + timestamp + merchant_secret_key);
+  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + client_unique_id + amount.toString()+ currency+relatedTransactionId + timestamp + merchant_secret_key);
   const checksum = cadena.toString();
 
     var myHeaders = new Headers();

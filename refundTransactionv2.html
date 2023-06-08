@@ -104,10 +104,19 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
   const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + client_unique_id + amount.toString()+ currency+relatedTransactionId + timestamp + merchant_secret_key);
   const checksum = cadena.toString();
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+  var xhttp = new XMLHttpRequest();
+  var url = "https://ppp-test.nuvei.com/ppp/api/v1/refundTransaction.do"; 
+  xhttp.open("POST", url, true);
+  xhttp.setRequestHeader("Content-Type", "application/json"); 
 
-    var raw = JSON.stringify({
+  xhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+
+      document.getElementById('result').innerHTML = JSON.stringify(response, null, 2);
+    }
+  };
+
+  var data = {
     "merchantId": merchant_id,
     "merchantSiteId": merchant_site_id,
     "clientRequestId": client_request_id,
@@ -120,22 +129,12 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     },
     "timeStamp": timestamp,
     "checksum": checksum
-});
-  
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
-    };
-  
-   fetch("https://ppp-test.safecharge.com/ppp/api/refundTransaction.do", requestOptions)
-      .then(response => response.json())
-      .then(result => {
+};
 
-            document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
-      })
-      .catch(error => console.log('error', error));
+  var jsonData = JSON.stringify(data);
+
+  xhttp.send(jsonData);
+   
 }
 
 

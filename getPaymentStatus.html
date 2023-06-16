@@ -40,6 +40,13 @@
 <div class="container">
   <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
     <form>
+        <label for="environment">Environment:</label>
+            <select id="environment">
+                <option value="#">Select</option>
+                <option value="https://secure.safecharge.com/ppp/api/v1/getPaymentStatus.do">PROD</option>
+                <option value="https://ppp-test.nuvei.com/ppp/api/v1/getPaymentStatus.do">TEST</option>
+            </select>
+
         <input type="text" id="sessionToken" name="sessionToken" placeholder="Session Token" required>
 
         <input type="button" value="Enviar" onclick="obtenerDatos()">
@@ -56,6 +63,7 @@
 
 function obtenerDatos(){
 
+    var environment = document.getElementById('environment').value;
     var sessionToken =document.getElementById('sessionToken').value;
 
     if (!sessionToken) {
@@ -77,7 +85,7 @@ function obtenerDatos(){
       redirect: 'follow'
     };
   
-    fetch("https://ppp-test.nuvei.com/ppp/api/v1/getPaymentStatus.do", requestOptions)
+    fetch(environment, requestOptions)
       .then(response => response.json())
       .then(result => {
 

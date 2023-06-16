@@ -40,6 +40,13 @@
 <div class="container">
   <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
     <form>
+        <label for="environment">Environment:</label>
+            <select id="environment">
+                <option value="#">Select</option>
+                <option value="https://secure.safecharge.com/ppp/api/createUser.do">PROD</option>
+                <option value="https://ppp-test.nuvei.com/ppp/api/createUser.do">TEST</option>
+            </select>
+
         <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret Key" required>
         <input type="text" id="merchant_id" name="merchant_id" placeholder="Merchant ID" required>
 
@@ -78,6 +85,7 @@
 
 function obtenerDatos(){
 
+    var environment = document.getElementById('environment').value;
     var merchant_id = document.getElementById('merchant_id').value;
     var merchant_site_id = document.getElementById('merchant_site_id').value;
     var merchant_secret_key =document.getElementById('merchant_secret_key').value;
@@ -126,7 +134,7 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       redirect: 'follow'
     };
   
-    fetch("https://ppp-test.nuvei.com/ppp/api/createUser.do", requestOptions)
+    fetch(environment, requestOptions)
       .then(response => response.json())
       .then(result => {
 

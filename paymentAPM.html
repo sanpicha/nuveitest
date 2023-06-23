@@ -114,7 +114,7 @@
       <input type="text" id="paymentez_fiscalNumber" name="paymentez_fiscalNumber" placeholder="Fiscal Number">
       <input type="text" id="paymentez_email" name="paymentez_email" placeholder="Email">
 
-      <select id="paymentez_bankCode" >
+      <select class="js-example-basic-single" id="paymentez_bankCode" >
           <option value="#">Bank</option>
           <option value="1022">Banco Union Colombiano</option>
           <option value="1558">BAN100</option>
@@ -154,7 +154,6 @@
           <option value="1019">SCOTIABANK COLPATRIA</option>
         </select>
 
-
     </div>
 
     <div id="apmgw_Oxxo" style="display: none;">
@@ -174,8 +173,6 @@
 
     </div>
 
-    
-
       <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
     </div>
@@ -184,8 +181,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  
  
-
 <script type="text/javascript">
+
+  $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+  });
 
   function showFields() {
       var payment_method = document.getElementById("payment_method");

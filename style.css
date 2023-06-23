@@ -123,3 +123,10 @@
           display: block;
           margin-left: 20px;
         }
+
+        .input-text{
+            display: flex;
+            gap: 20px;
+        }
+
+    

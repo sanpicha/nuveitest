@@ -76,37 +76,6 @@
           <option value="USD">USD</option>
         </select>
 
-<div class="container2">
-    <div class="card">
-        <div class="form">
-            <div class="right-side">
-              <label>Card Details</label>
-                <div class="input-text">
-                  
-                    <input type="text" id="cardHolderName" placeholder="Card Holder Name" require>
-                    
-                </div>
-                <div class="input-text">
-                    <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" data-slots="0" data-accept="\d" require>
-                    
-                </div> 
-                <div class="input-div">
-                    <div class="input-text">
-                       <input type="text" id="expirationMonth" placeholder="MM" data-slots="MM" require>
-
-                       <input type="text" id="expirationYear" placeholder="YYYY" data-slots="YYYY" require>
-                       
-                    </div>
-                    <div class="input-text">
-                       <input type="text" id="CVV" placeholder="000" data-slots="0" data-accept="\d" size="3" require>
-                       
-                    </div>
-                </div> 
-            </div>
-        </div>
-    </div>
-</div>
-
       <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
     </div>
@@ -118,59 +87,10 @@
 
 <script type="text/javascript">
 
-document.addEventListener('DOMContentLoaded', () => {
-for (const el of document.querySelectorAll("[placeholder][data-slots]")) {
-const pattern = el.getAttribute("placeholder"),
-slots = new Set(el.dataset.slots || "_"),
-prev = (j => Array.from(pattern, (c,i) => slots.has(c)? j=i+1: j))(0),
-first = [...pattern].findIndex(c => slots.has(c)),
-accept = new RegExp(el.dataset.accept || "\\d", "g"),
-clean = input => {
-input = input.match(accept) || [];
-return Array.from(pattern, c =>
-input[0] === c || slots.has(c) ? input.shift() || c : c
-);
-},
-format = () => {
-const [i, j] = [el.selectionStart, el.selectionEnd].map(i => {
-i = clean(el.value.slice(0, i)).findIndex(c => slots.has(c));
-return i<0? prev[prev.length-1]: back? prev[i-1] || first: i; }); el.value=clean(el.value).join``; el.setSelectionRange(i, j); back=false; }; let back=false; el.addEventListener("keydown", (e)=> back = e.key === "Backspace");
-    el.addEventListener("input", format);
-    el.addEventListener("focus", format);
-    el.addEventListener("blur", () => el.value === pattern && (el.value=""));
-    }
-    });
-
-var user_name = document.querySelector(".user_name");
-var set_card_number = document.querySelector(".set_card_number");
-var user_cardcvv = document.querySelector(".user_card_cvv");
-var card= document.querySelector(".debit-card");
-var click_pay = document.querySelector(".click-pay");
-var left_side = document.querySelector(".left-side");
-var right_side = document.querySelector(".right-side");
-var success = document.querySelector(".success");
-
-
-function validateform(){
-    validate=true;
-var validate_inputs=document.querySelectorAll(".right-side input");  
-     
-     validate_inputs.forEach(function(input_valid){
-     input_valid.classList.remove('warning');
-     if(input_valid.hasAttribute('require')){
-         if(input_valid.value.length==0){
-             validate=false;
-             input_valid.classList.add('warning');
-         }
-     }
-});
-  return validate;
-}
 
 
 function obtenerDatos(){
     document.getElementById('result').innerHTML = '';
-
     var environment = document.getElementById('environment').value;
     var merchant_secret_key = document.getElementById('merchant_secret_key').value;
     var sessionToken = document.getElementById('sessionToken').value;
@@ -179,13 +99,8 @@ function obtenerDatos(){
     var merchant_id = document.getElementById('merchant_id').value;
     var client_request_id = document.getElementById('client_request_id').value;
     var currency = document.getElementById('currency').value;
-    var cardNumber = document.getElementById('cardNumber').value;
-    var cardHolderName = document.getElementById('cardHolderName').value;
-    var expirationMonth = document.getElementById('expirationMonth').value;
-    var expirationYear = document.getElementById('expirationYear').value;
-    var CVV = document.getElementById('CVV').value;
 
-    if (!sessionToken || !amount || !merchant_secret_key ||!merchant_site_id ||!merchant_id ||!client_request_id ||!currency ||!cardNumber || !cardHolderName || !expirationMonth || !expirationYear || !CVV) {
+    if (!sessionToken || !amount || !merchant_secret_key ||!merchant_site_id ||!merchant_id ||!client_request_id ||!currency) {
       alert("Por favor ingrese todos los campos");
       return;
     }
@@ -216,11 +131,11 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     "clientUniqueId":"123456",
     "paymentOption":{
         "card":{
-            "cardNumber":cardNumber,
-            "cardHolderName":cardHolderName,
-            "expirationMonth":expirationMonth,
-            "expirationYear":expirationYear,
-            "CVV":CVV
+            "cardNumber":"4000027891380961",
+            "cardHolderName":"John Smith",
+            "expirationMonth":"12",
+            "expirationYear":"2030",
+            "CVV":"217"
         }
     },
     "deviceDetails":{
@@ -234,7 +149,8 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     },
     "timeStamp":timestamp,
     "checksum":checksum
-});
+}
+);
   
     var requestOptions = {
       method: 'POST',
@@ -247,12 +163,18 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       .then(response => response.json())
       .then(result => {
 
+        //const redirectUrl = result.paymentOption.redirectUrl
+        //window.location.href = redirectUrl;
+        //document.getElementById("redirectUrl").textContent = redirectUrl;
         document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
       })
       .catch(error => console.log('error', error));
 }
-</script>
 
+
+
+</script>
+</script>
 <script src="index.js" type="text/javascript"></script>
 </body>  
 </html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">  
+<head>    
+    <title>Nuvei test</title>    
+    <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
+    <meta charset="UTF-8">
+    <meta name="title" content="Título de la WEB">
+    <meta name="description" content="Descripción de la WEB">  
+    <link rel="stylesheet" type="text/css" href="style.css">   
+
+</head>  
+<body> 
+    <div class="navbar">
+      <ul>
+        <li><a href="welcome.html">Introduction</a></li>
+        <li><a href="sessionToken.html">Session Token</a></li>
+        <li><a href="openOrder.html">Open Order</a></li>
+        <li><a href="initPayment.html">Init Payment</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle">Payment</a>
+          <ul class="dropdown-menu">
+            <li><a href="simpleCardRequest.html">Simple Card Request</a></li>
+            <li><a href="fullCardRequest.html">Full Card Request</a></li>
+            <li><a href="paymentAPM.html">Payment APM</a></li>
+            <li><a href="#">Otro</a></li>
+          </ul>
+        </li>
+        <li><a href="settleTransaction.html">Settle Transaction</a></li>
+        <li><a href="refundTransaction.html">Refund Transaction</a></li>
+        <li><a href="voidTransaction.html">Void Transaction</a></li>
+        <li><a href="payout.html">Payout</a></li>
+        <li><a href="getPaymentStatus.html">Get Payment Status</a></li>
+        <li><a href="getPayoutStatus.html">Get Payout Status</a></li>
+        <li><a href="accountCapture.html">Account Capture</a></li>  
+
+    </ul>
+</div>
+ 
+    <header>
+           
+    </header>
+  </head>
+  <body>
+<div class="container">
+  <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
+    <form>
+      <label for="environment">Environment:</label>
+       <select id="environment" >
+          <option value="#">Select</option>
+          <option value="https://secure.safecharge.com/ppp/purchase.do?">PROD</option>
+          <option value="https://ppp-test.safecharge.com/ppp/purchase.do?">TEST</option>
+        </select>
+
+      <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret" required>
+      <input type="text" id="merchant_id" name="merchant_id" placeholder="Merchat ID" required>
+      <input type="text" id="merchant_site_id" name="merchant_site_id" placeholder="Merchant Site" required>
+
+      <input type="email" id="email" name="email" placeholder="Email" required>
+
+      <input type="number" id="amount" name="amount" min="0" step="0.01" placeholder="Amount" required>
+
+      <input type="number" id="item_quantity" name="item_quantity" placeholder="Item Quantity" required>
+
+      <label for="currency">Currency:</label>
+       <select id="currency" >
+          <option value="#">Select</option>
+          <option value="MXN">MXN</option>
+          <option value="COP">COP</option>
+          <option value="BRL">BRL</option>
+          <option value="USD">USD</option>
+        </select>
+
+      <input type="button" value="Enviar" onclick="obtenerDatos()">
+    </form>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
+<script type="text/javascript">
+
+function obtenerDatos(){
+
+    var environment = document.getElementById('environment').value;
+    var merchant_secret_key = document.getElementById('merchant_secret_key').value;
+    var merchant_id = document.getElementById('merchant_id').value;
+    var merchant_site_id = document.getElementById('merchant_site_id').value;
+    var currency = document.getElementById('currency').value;
+    const user_token_id = "ef458cc1-3784888810";
+    const item_name_1 = "CP662 Classe Premiere";
+    const item_number_1 = "6720";
+    const first_name = "Test Test";
+    var item_amount_1 = parseInt(document.getElementById('amount').value);
+    var item_quantity_1 = parseInt(document.getElementById('item_quantity').value);
+    const total_amount = item_amount_1 * item_quantity_1;
+    const numberofitems = "1";
+    const encoding = "utf-8";
+    const version = "4.0.0";
+    var email = document.getElementById('email').value;
+    const invoice_id = "1000061359";
+    const shipping = "0";
+    const notify_url = "https://webhook.site/45e01961-b1e6-43f4-b22c-ea0d472be590";
+    const success_url = "https://typedwebhook.tools/webhook/cf68f813-1fd3-4729-b5ef-0e2b113a9c61";
+    const back_url = "https://typedwebhook.tools/webhook/cf68f813-1fd3-4729-b5ef-0e2b113a9c61";
+
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+    const seconds = String(currentDate.getSeconds()).padStart(2, '0');
+
+    const timestamp = `${year}-${month}-${day}.${hours}:${minutes}:${seconds}`;
+    
+
+    if (!item_amount_1 || !item_quantity_1 || !email || !merchant_secret_key || !merchant_id || !merchant_site_id ) {
+    alert("Por favor ingrese todos los campos");
+    return;
+}
+
+    const cadena = merchant_secret_key + merchant_id + merchant_site_id + total_amount.toString() + currency + user_token_id + item_name_1 + item_number_1 + item_amount_1.toString() + item_quantity_1.toString() + numberofitems + timestamp + encoding + version + email + first_name + invoice_id + shipping + notify_url + success_url + back_url;
+
+    const checksum = CryptoJS.SHA256(cadena);
+    const url = environment + "merchant_id=" + merchant_id + "&merchant_site_id=" + merchant_site_id + "&total_amount=" + total_amount.toString() + "&currency=" + currency + "&user_token_id=" + user_token_id + "&item_name_1=" + item_name_1 + "&item_number_1=" + item_number_1 + "&item_amount_1=" + item_amount_1.toString() + "&item_quantity_1=" + item_quantity_1.toString() + "&numberofitems=" + numberofitems + "&time_stamp=" + timestamp + "&encoding=" + encoding + "&version=" + version + "&email=" + email + "&first_name=" + first_name + "&invoice_id=" + invoice_id + "&shipping=" + shipping + "&notify_url=" + notify_url + "&success_url=" + success_url + "&back_url=" + back_url + "&checksum=" + checksum;
+    window.location.href = url;
+}
+
+
+</script>
+</body>  
+</html>
+

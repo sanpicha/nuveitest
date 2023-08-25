@@ -141,4 +141,9 @@
             gap: 20px;
         }
 
+        .wrapper > * {
+            overflow: auto;
+            flex: 1 1 auto;
+        }
+
     

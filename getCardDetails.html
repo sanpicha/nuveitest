@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Session Token</title>
+    <title>Get Card Details</title>
     <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
     <meta charset="UTF-8">
     <meta name="title" content="Test Nuvei">
@@ -32,19 +32,20 @@
         <li><a href="payout.html">Payout</a></li>
         <li><a href="getPaymentStatus.html">Get Payment Status</a></li>
         <li><a href="getPayoutStatus.html">Get Payout Status</a></li>
-        <li><a href="accountCapture.html">Account Capture</a></li>
-         <li class="dropdown">
+        <li><a href="accountCapture.html">Account Capture</a></li>  
+        <li class="dropdown">
           <a href="#" class="dropdown-toggle">DCC Methods</a>
           <ul class="dropdown-menu">
             <li><a href="getCardDetails.html">Get Card Details</a></li>
             <li><a href="#">Get Mcp Rates</a></li>
             <li><a href="#">Get Dcc Details</a></li>
           </ul>
-        </li>  
+        </li>
 
     </ul>
 </div>
 </div>
+
 <header>
 </header>
 <div class="container">
@@ -53,16 +54,36 @@
         <label for="environment">Environment:</label>
         <select id="environment">
           <option value="#">Select</option>
-          <option value="https://secure.safecharge.com/ppp/api/v1/getSessionToken.do">PROD</option>
-          <option value="https://ppp-test.nuvei.com/ppp/api/v1/getSessionToken.do">TEST</option>
+          <option value="https://secure.safecharge.com/ppp/api/v1/getCardDetails.do">PROD</option>
+          <option value="https://ppp-test.nuvei.com/ppp/api/v1/getCardDetails.do">TEST</option>
         </select>
 
-        <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret Key" required>
+        <input type="text" id="sessionToken" name="sessionToken" placeholder="Session Token" required>
+
         <input type="text" id="merchant_id" name="merchant_id" placeholder="Merchant ID" required>
 
         <input type="text" id="merchant_site_id" name="merchant_site_id" placeholder="Merchant Site ID" required>
 
         <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
+
+        <input type="text" id="client_unique_id" name="client_unique_id" placeholder="Client Unique ID" required>
+
+    <div class="container2">
+    <div class="card">
+        <div class="form">
+            <div class="right-side">
+                
+                <div class="input-text">
+                    <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" data-slots="0" data-accept="\d" require>
+                    
+                </div> 
+                
+            </div>
+        </div>
+    </div>
+</div> 
+
+
 
         <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
@@ -76,40 +97,82 @@
 
 <script type="text/javascript">
 
-function obtenerDatos(){
+    document.addEventListener('DOMContentLoaded', () => {
+    for (const el of document.querySelectorAll("[placeholder][data-slots]")) {
+    const pattern = el.getAttribute("placeholder"),
+    slots = new Set(el.dataset.slots || "_"),
+    prev = (j => Array.from(pattern, (c,i) => slots.has(c)? j=i+1: j))(0),
+    first = [...pattern].findIndex(c => slots.has(c)),
+    accept = new RegExp(el.dataset.accept || "\\d", "g"),
+    clean = input => {
+    input = input.match(accept) || [];
+    return Array.from(pattern, c =>
+    input[0] === c || slots.has(c) ? input.shift() || c : c
+    );
+    },
+    format = () => {
+    const [i, j] = [el.selectionStart, el.selectionEnd].map(i => {
+    i = clean(el.value.slice(0, i)).findIndex(c => slots.has(c));
+    return i<0? prev[prev.length-1]: back? prev[i-1] || first: i; }); el.value=clean(el.value).join``; el.setSelectionRange(i, j); back=false; }; let back=false; el.addEventListener("keydown", (e)=> back = e.key === "Backspace");
+        el.addEventListener("input", format);
+        el.addEventListener("focus", format);
+        el.addEventListener("blur", () => el.value === pattern && (el.value=""));
+        }
+        });
 
+    var user_name = document.querySelector(".user_name");
+    var set_card_number = document.querySelector(".set_card_number");
+    var user_cardcvv = document.querySelector(".user_card_cvv");
+    var card= document.querySelector(".debit-card");
+    var click_pay = document.querySelector(".click-pay");
+    var left_side = document.querySelector(".left-side");
+    var right_side = document.querySelector(".right-side");
+    var success = document.querySelector(".success");
+
+
+    function validateform(){
+        validate=true;
+    var validate_inputs=document.querySelectorAll(".right-side input");  
+         
+         validate_inputs.forEach(function(input_valid){
+         input_valid.classList.remove('warning');
+         if(input_valid.hasAttribute('require')){
+             if(input_valid.value.length==0){
+                 validate=false;
+                 input_valid.classList.add('warning');
+             }
+         }
+    });
+      return validate;
+    }
+
+function obtenerDatos(){
+  
     document.getElementById('result').innerHTML = '';
     var environment = document.getElementById('environment').value;
     var merchant_id = document.getElementById('merchant_id').value;
     var merchant_site_id = document.getElementById('merchant_site_id').value;
-    var merchant_secret_key =document.getElementById('merchant_secret_key').value;
+    var sessionToken =document.getElementById('sessionToken').value;
     var client_request_id =document.getElementById('client_request_id').value;
+    var client_unique_id =document.getElementById('client_unique_id').value;
+    var cardNumber =document.getElementById('cardNumber').value;
 
-    if (!merchant_id || !merchant_site_id ||!merchant_secret_key ||!client_request_id) {
+    if (!merchant_id || !merchant_site_id ||!sessionToken ||!client_request_id ||!client_unique_id ||!cardNumber) {
       alert("Por favor ingrese todos los campos");
       return;
     }
   
-const fecha = new Date();
-const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZero(fecha.getDate())}${padZero(fecha.getHours())}${padZero(fecha.getMinutes())}${padZero(fecha.getSeconds())}`;
-
-  function padZero(valor) {
-    return valor.toString().padStart(2, '0');
-  }
-
-  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + timestamp + merchant_secret_key);
-  const checksum = cadena.toString();
-
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
+    "sessionToken": sessionToken,
     "merchantId": merchant_id,
     "merchantSiteId": merchant_site_id,
     "clientRequestId": client_request_id,
-    "timeStamp": timestamp,
-    "checksum": checksum
-    });
+    "clientUniqueId": client_unique_id,
+    "cardNumber": cardNumber
+});
   
     var requestOptions = {
       method: 'POST',
@@ -122,17 +185,8 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       .then(response => response.json())
       .then(result => {
 
-        if (result.status == 'SUCCESS'){
-           const session_token = result.sessionToken;
-           document.getElementById('result').style.display = 'block';
-          document.getElementById('result').innerHTML = 'Session Token: ' + session_token;
-            //document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
-        }else{
-
-          alert("Something went wrong, review yours fields!"); 
-
-        }
-
+         document.getElementById('result').style.display = 'block';
+         document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
            
       })
       .catch(error => console.log('error', error));

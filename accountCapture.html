@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 
 <body>
+<div class="wrapper">
 <div class="navbar">
       <ul>
         <li><a href="welcome.html">Introduction</a></li>
@@ -31,9 +32,18 @@
         <li><a href="payout.html">Payout</a></li>
         <li><a href="getPaymentStatus.html">Get Payment Status</a></li>
         <li><a href="getPayoutStatus.html">Get Payout Status</a></li>
-        <li><a href="accountCapture.html">Account Capture</a></li>  
+        <li><a href="accountCapture.html">Account Capture</a></li>
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle">DCC Methods</a>
+          <ul class="dropdown-menu">
+            <li><a href="getCardDetails.html">Get Card Details</a></li>
+            <li><a href="#">Get Mcp Rates</a></li>
+            <li><a href="#">Get Dcc Details</a></li>
+          </ul>
+        </li>  
 
     </ul>
+</div>
 </div>
 
 <header>
@@ -78,7 +88,7 @@
         <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
 
-    <div id="result"></div>
+    <div id="result" style="display:none"></div>
 </div>
 
 
@@ -127,7 +137,7 @@ function obtenerDatos(){
     fetch(environment, requestOptions)
       .then(response => response.json())
       .then(result => {
-        
+        document.getElementById('result').style.display = 'block';        
         document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
       })
       .catch(error => console.log('error', error));

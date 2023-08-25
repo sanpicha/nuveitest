@@ -17,6 +17,7 @@
 
 </head>
 <body>
+<div class="wrapper">
 <div class="navbar">
      <ul>
         <li><a href="welcome.html">Introduction</a></li>
@@ -39,9 +40,18 @@
         <li><a href="payout.html">Payout</a></li>
         <li><a href="getPaymentStatus.html">Get Payment Status</a></li>
         <li><a href="getPayoutStatus.html">Get Payout Status</a></li>
-        <li><a href="accountCapture.html">Account Capture</a></li>  
+        <li><a href="accountCapture.html">Account Capture</a></li>
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle">DCC Methods</a>
+          <ul class="dropdown-menu">
+            <li><a href="getCardDetails.html">Get Card Details</a></li>
+            <li><a href="#">Get Mcp Rates</a></li>
+            <li><a href="#">Get Dcc Details</a></li>
+          </ul>
+        </li>  
 
     </ul>
+</div>
 </div>
     
   </head>
@@ -110,7 +120,7 @@
 
       <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
-    <div id='result'></div>
+    <div id='result' style="display:none"></div>
 </div>
           
     
@@ -214,6 +224,7 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     "currency": currency,
     "userTokenId": "230811147",
     "clientUniqueId": "12345",
+    "relatedTransactionId": "711000000024967718",
     "paymentOption": {
         "card": {
             "cardNumber":cardNumber,
@@ -234,8 +245,9 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
                     "timeZone": "0",
                     "userAgent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47)"
                 },
-                "version": "2",
-                "notificationUrl": "https://example.com",
+                "methodCompletionInd":"U",
+                "version": "2.1.0",
+                "notificationUrl": "https://typedwebhook.tools/webhook/87cff508-2207-47d8-b6cd-36e7b0010e6e",
                 "merchantUrl": "https://example.com",
                 "platformType": "02",
                 "v2AdditionalParams": {
@@ -270,6 +282,7 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
       .then(response => response.json())
       .then(result => {
 
+        document.getElementById('result').style.display = 'block';
         document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
       })
       .catch(error => console.log('error', error));

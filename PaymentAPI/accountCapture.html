@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Get Payout Status</title>
+    <title>Account Capture</title>
     <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
     <meta charset="UTF-8">
     <meta name="title" content="Test Nuvei">
@@ -12,32 +12,31 @@
 <div class="wrapper">
 <div class="navbar">
       <ul>
+        <li><a href="C:\Users\Santiago.gomez\OneDrive - Nuvei Technologies\Documents\Drive\Documentos\Integraciones\SCRIPT\Nuvei API\index.html"> < Back to Init</a></li>
         <li><a href="welcome.html">Introduction</a></li>
-        <li><a href="WebSdk/websdk.html">Web SDK</a></li>
-        <li><a href="paymentPage.html">Payment Page (Cashier)</a></li>
-        <li><a href="sessionToken.html">Session Token</a></li>
-        <li><a href="openOrder.html">Open Order</a></li>
-        <li><a href="initPayment.html">Init Payment</a></li>
+        <li><a href="PaymentAPI/sessionToken.html">Session Token</a></li>
+        <li><a href="PaymentAPI/openOrder.html">Open Order</a></li>
+        <li><a href="PaymentAPI/initPayment.html">Init Payment</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle">Payment</a>
           <ul class="dropdown-menu">
-            <li><a href="simpleCardRequest.html">Simple Card Request</a></li>
-            <li><a href="fullCardRequest.html">Full Card Request</a></li>
-            <li><a href="paymentAPM.html">Payment APM</a></li>
+            <li><a href="PaymentAPI/simpleCardRequest.html">Simple Card Request</a></li>
+            <li><a href="PaymentAPI/fullCardRequest.html">Full Card Request</a></li>
+            <li><a href="PaymentAPI/paymentAPM.html">Payment APM</a></li>
             <li><a href="#">Otro</a></li>
           </ul>
         </li>
-        <li><a href="settleTransaction.html">Settle Transaction</a></li>
-        <li><a href="refundTransaction.html">Refund Transaction</a></li>
-        <li><a href="voidTransaction.html">Void Transaction</a></li>
-        <li><a href="payout.html">Payout</a></li>
-        <li><a href="getPaymentStatus.html">Get Payment Status</a></li>
-        <li><a href="getPayoutStatus.html">Get Payout Status</a></li>
-        <li><a href="accountCapture.html">Account Capture</a></li>
+        <li><a href="PaymentAPI/settleTransaction.html">Settle Transaction</a></li>
+        <li><a href="PaymentAPI/refundTransaction.html">Refund Transaction</a></li>
+        <li><a href="PaymentAPI/voidTransaction.html">Void Transaction</a></li>
+        <li><a href="PaymentAPI/payout.html">Payout</a></li>
+        <li><a href="PaymentAPI/getPaymentStatus.html">Get Payment Status</a></li>
+        <li><a href="PaymentAPI/getPayoutStatus.html">Get Payout Status</a></li>
+        <li><a href="PaymentAPI/accountCapture.html">Account Capture</a></li>
          <li class="dropdown">
           <a href="#" class="dropdown-toggle">DCC Methods</a>
           <ul class="dropdown-menu">
-            <li><a href="getCardDetails.html">Get Card Details</a></li>
+            <li><a href="PaymentAPI/getCardDetails.html">Get Card Details</a></li>
             <li><a href="#">Get Mcp Rates</a></li>
             <li><a href="#">Get Dcc Details</a></li>
           </ul>
@@ -46,6 +45,7 @@
     </ul>
 </div>
 </div>
+
 <header>
 </header>
 <div class="container">
@@ -54,8 +54,8 @@
         <label for="environment">Environment:</label>
             <select id="environment">
                 <option value="#">Select</option>
-                <option value="https://secure.safecharge.com/ppp/api/v1/getPayoutStatus.do">PROD</option>
-                <option value="https://ppp-test.nuvei.com/ppp/api/v1/getPayoutStatus.do">TEST</option>
+                <option value="https://secure.safecharge.com/ppp/api/v1/accountCapture.do">PROD</option>
+                <option value="https://ppp-test.nuvei.com/ppp/api/v1/accountCapture.do">TEST</option>
             </select>
 
         <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret Key" required>
@@ -64,6 +64,26 @@
         <input type="text" id="merchant_site_id" name="merchant_site_id" placeholder="Merchant Site ID" required>
 
         <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
+
+        <input type="text" id="sessionToken" name="sessionToken" placeholder="Session Token" required>
+
+        <label for="payment_method">Payment Method:</label>
+        <select id="payment_method">
+          <option value="#">Select</option>
+          <option value="apmgw_Safetypay">SafetyPay</option>
+          <option value="apmgw_PSE_PZ">PSE</option>
+          <option value="apmgw_Oxxo">Oxxo</option>
+          <option value="apmgw_Pago_Efectivo">Pago Efectivo</option>
+        </select>
+
+        <label for="currency">Currency:</label>
+        <select id="currency">
+          <option value="#">Select</option>
+          <option value="COP">COP</option>
+          <option value="MXN">MXN</option>
+          <option value="PEN">PEN</option>
+          <option value="USD">USD</option>
+        </select>
 
         <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
@@ -84,31 +104,27 @@ function obtenerDatos(){
     var merchant_site_id = document.getElementById('merchant_site_id').value;
     var merchant_secret_key =document.getElementById('merchant_secret_key').value;
     var client_request_id =document.getElementById('client_request_id').value;
+    var sessionToken =document.getElementById('sessionToken').value;
 
-    if (!merchant_id || !merchant_site_id ||!merchant_secret_key ||!client_request_id) {
+    if (!merchant_id || !merchant_site_id ||!merchant_secret_key ||!client_request_id ||!sessionToken)  {
       alert("Por favor ingrese todos los campos");
       return;
     }
-  
-const fecha = new Date();
-const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZero(fecha.getDate())}${padZero(fecha.getHours())}${padZero(fecha.getMinutes())}${padZero(fecha.getSeconds())}`;
-
-  function padZero(valor) {
-    return valor.toString().padStart(2, '0');
-  }
-
-  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + timestamp + merchant_secret_key);
-  const checksum = cadena.toString();
-
+ 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var raw = JSON.stringify({
+    "sessionToken": sessionToken,
     "merchantId": merchant_id,
     "merchantSiteId": merchant_site_id,
-    "clientRequestId": client_request_id,
-    "timeStamp": timestamp,
-    "checksum": checksum
+    "paymentMethod": payment_method,
+    "userTokenId": "123456",
+    "currencyCode": currency,
+    "countryCode": "US",
+    "amount": amount,
+    "languageCode": "en",
+    "notificationUrl": "https://example.com"
 });
   
     var requestOptions = {
@@ -121,8 +137,7 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     fetch(environment, requestOptions)
       .then(response => response.json())
       .then(result => {
-
-        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').style.display = 'block';        
         document.getElementById('result').innerHTML = JSON.stringify(result, null, 2);
       })
       .catch(error => console.log('error', error));

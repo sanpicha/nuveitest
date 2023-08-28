@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Web SDK</title>
+    <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
+    <meta charset="UTF-8">
+    <meta name="title" content="Test Nuvei">
+    <meta name="description" content="Descripción de la WEB">
+    <script src="https://cdn.safecharge.com/safecharge_resources/v1/websdk/safecharge.js"></script>
+    <link rel="stylesheet" type="text/css" href="styleweb.css"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+
+<body>
+<div class="wrapper">
+<div class="navbar">
+      <ul>
+        <li><a href="../welcome.html"> < Back to API</a></li>
+    </ul>
+</div>
+</div>
+<header>
+</header>
+<div class="container">
+  <img class="image" src="https://cdn.paymentez.com/img/nv/nuvei_logo.png">
+
+      
+      <label for="environment">Environment:</label>
+        <select id="environment">
+          <option value="#">Select</option>
+          <option value="prod">PROD</option>
+          <option value="int">TEST</option>
+        </select>
+
+          <div class="item"> 
+            <input type="text" placeholder="sessionToken" id="session" name="session" /> 
+          </div>
+          <div class="item">   
+            <input value="" type="text" placeholder="merchantId" id="metchantID" /> 
+          </div>
+          <div class="item">   
+            <input value="" type="text" placeholder="merchantSiteId"  id="metchantSiteID"/> 
+          </div>
+          <div class="item100">
+             <button class='pay-button' onclick="initSDK()">Initialize webSDK</button>
+          </div>
+      
+          
+          <div class="webSDK-placeholder"></div>
+
+          <div class="webSDK-container toggle-content item100">
+          <div class="item">
+           <!--<label for="cardHolderName">Cardholder name</label>--> 
+            <input type="text" placeholder="Cardholder name"  id="cardHolderName" name="cardHolderName" value="" />
+          </div>
+          <div class="item100" id="card_number">
+             <!--<label for="card-field-placeholder">
+               Credit or debit card
+             </label>-->
+               <div id="card-field-placeholder" class="some initial css-classes">
+              <!-- SFC Card widget will be inserted here. -->
+              </div>
+          <!-- Used to display form errors. -->
+              <div id="scard-errors" role="alert"></div>
+          </div>
+          <button class='pay-button' onclick="main()">Submit Payment</button>
+        </div>
+      
+
+        <div id="result" style="display:none"></div> 
+  </div>     
+       
+        <script type="text/javascript" src="indexweb.js"></script>
+    </body>
+
+</body>  
+</html>
+        
+
+
+

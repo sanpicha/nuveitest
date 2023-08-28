@@ -1,0 +1,310 @@
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        input[type ="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            margin-top: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="button"] {
+            background: #081f2c;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #175b81;
+        }
+
+        .image {
+            display: block;
+            position: top;
+            width: 20%;
+            height: 70%;
+            margin: auto;
+            padding: 20px;
+        }
+
+          .container {
+            margin-top: 70px;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            margin-left: 300px;
+
+        }        
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background-color: #081f2c;
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        .navbar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar li {
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        li a {
+            display: block;
+            color: #000;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+        li a.active {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+        li a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+
+           .dropdown-menu {
+          display: none;
+        }
+
+        .dropdown.active .dropdown-menu {
+          display: block;
+          margin-left: 20px;
+        }
+
+        .input-text{
+            display: flex;
+            gap: 20px;
+        }
+
+        .wrapper > * {
+            overflow: auto;
+            flex: 1 1 auto;
+        }
+
+        
+    
+/*
+.container {
+  display: grid;
+  flex-wrap: wrap;
+  order: 2;
+  justify-content: left;
+}
+*/
+
+#result {
+  margin-top: 1rem;
+  background-color: #3a4453;
+  color: #fff;
+  font-size: 12px;
+  flex: 0 100%;
+
+}
+
+.item {
+  /* flex: 0 48%; */
+  /*height: 100%;
+  margin-bottom: 2%; /* (100-32*3)/2 
+  padding-right: 15px;*/
+}
+.item100 {
+  flex: 0 100%;
+  height: 50px;
+  margin-top: 0%;
+  margin-bottom: 2%; /* (100-32*3)/2 */
+  justify-content: center;
+
+}
+
+.toggle-content, .is-hide {
+  display: none;
+}
+
+.toggle-content.is-visible {
+  height: 100%;
+  display: block;
+}
+
+.webSDK-placeholder {
+  height: 20rem;
+}
+
+/*
+ input {
+   background: #ffffff;
+   border-radius: 3px;
+   border: 1px solid #d3dce6;
+   color: #4a5568;
+   display: block;
+   outline: none;
+   padding: 5px 12px;
+   width: 360px;
+   font-family: Nunito Sans, sans-serif;
+}
+ input:placeholder-shown {
+   border: 1px solid #d3dce6;
+}
+ input:hover {
+   border: 1px solid #95aac1;
+}
+ input:focus {
+   border: 1px solid #00becf;
+}
+*/
+ #card-field-placeholder, #card-number, #card-expiry, #card-cvc {
+   background: #ffffff;
+   border-radius: 3px;
+   border: 1px solid #d3dce6;
+   color: #4a5568;
+   display: block;
+   margin-top: 5px;
+   outline: none;
+   padding: 7px 12px;
+   width: 360px;
+}
+ #card_number_three_fields {
+   margin-top: 5px;
+   padding: 7px 12px;
+   width: 470px;
+}
+
+ .pay-button {
+   background-color: #00becf;
+   border-radius: 3px;
+   border: 1px solid #00A6B5;
+   color: #fff;
+   font-size: 14px;
+   font-weight: 400;
+   height: 36px;
+   line-height: 20px;
+   margin-top: 10px;   
+   margin-bottom: 10px;
+   width: 140px;
+   cursor: pointer;
+}
+.pay-button:hover {
+  color: #fff;
+  background-color: #0f93a1;
+}
+ .validation-error {
+   color: #FF3F5A;
+   font-size: 12px;
+   height: 16px;
+   line-height: 16px;
+   visibility: hidden;
+}
+
+ label {
+   color: #4a5568;
+   font-size: 14px;
+   font-weight: 600;
+}
+ #card_number {
+   width: 700px;
+}
+ #cardholder_name {
+   width: 470px;
+}
+
+ #card-field-placeholder.sfc-focus, #card-number.focused, #card-expiry.focused, #card-cvc.focused  {
+   border: 1px solid #00becf;
+}
+
+ #card-field-placeholder.sfc-focus, #card-number:hover, #card-expiry:hover, #card-cvc:hover {
+   border: 1px solid #95aac1;
+}
+ 
+button, input, optgroup, select, textarea {
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+body {
+  font-family: Nunito Sans, Roboto,sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4a5568;
+  line-height: 1.8;
+}
+
+
+ .sfcModal-header {
+   height: 1.5rem;
+}
+ .sfcModal-dialog {
+   margin: 55px auto;
+   max-width: 492px;
+   position: relative;
+   width: auto;
+}
+ .sfcModal-content {
+   background-clip: padding-box;
+   background-color: #ffffff;
+   border: 1px solid #dfdfdf;
+   outline: 0;
+   position: relative;
+}
+.sfcModal-close {
+   border: 0;
+   color: #2c2a2a;
+   cursor: pointer;
+   font-size: .9rem;
+   padding: 0;
+   position: absolute;
+   right: 0.5rem;
+   top: 0.4rem;
+ }
+ .sfcIcon--close:before {
+   content: "\2716";
+ }
+     
+      
+  
+    

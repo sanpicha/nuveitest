@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>Create User</title>
+    <title>Update User</title>
     <link href="https://paymentez.github.io/api-doc/images/favicon-d165b374.svg" rel="icon" type="image/svg">
     <meta charset="UTF-8">
     <meta name="title" content="Test Nuvei">
@@ -13,35 +13,12 @@
 <div class="navbar">
      <ul>
         <li><a href="../Introduction/index.html"><img width="30" height="30" src="https://img.icons8.com/flat-round/64/circled-left-2--v1.png" alt="circled-left-2--v1"/></a></li>
-        <li><a href="welcome.html">Introduction</a></li>
-        <li><a href="sessionToken.html">Session Token</a></li>
-        <li><a href="openOrder.html">Open Order</a></li>
-        <li><a href="initPayment.html">Init Payment</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle">Payment</a>
-          <ul class="dropdown-menu">
-            <li><a href="simpleCardRequest.html">Simple Card Request</a></li>
-            <li><a href="fullCardRequest.html">Full Card Request</a></li>
-            <li><a href="paymentAPM.html">Payment APM</a></li>
-            <li><a href="#">Otro</a></li>
-          </ul>
-        </li>
-        <li><a href="settleTransaction.html">Settle Transaction</a></li>
-        <li><a href="refundTransaction.html">Refund Transaction</a></li>
-        <li><a href="voidTransaction.html">Void Transaction</a></li>
-        <li><a href="payout.html">Payout</a></li>
-        <li><a href="getPaymentStatus.html">Get Payment Status</a></li>
-        <li><a href="getPayoutStatus.html">Get Payout Status</a></li>
-        <li><a href="accountCapture.html">Account Capture</a></li>
-         <li class="dropdown">
-          <a href="#" class="dropdown-toggle">DCC Methods</a>
-          <ul class="dropdown-menu">
-            <li><a href="getCardDetails.html">Get Card Details</a></li>
-            <li><a href="#">Get Mcp Rates</a></li>
-            <li><a href="#">Get Dcc Details</a></li>
-          </ul>
-        </li>  
+        <li><a href="index.html">Introduction</a></li>
+        <li><a href="getMerchantPaymentMethods.html">Get Merchant Payment Methods</a></li>
+        <li><a href="createuser.html">Create User</a></li>
+        <li><a href="updateUser.html">Update User</a></li>
 
+      
     </ul>
 </div>
 </div>
@@ -53,11 +30,12 @@
         <label for="environment">Environment:</label>
             <select id="environment">
                 <option value="#">Select</option>
-                <option value="https://secure.safecharge.com/ppp/api/createUser.do">PROD</option>
-                <option value="https://ppp-test.nuvei.com/ppp/api/createUser.do">TEST</option>
+                <option value="https://secure.safecharge.com/ppp/api/v1/updateUser.do">PROD</option>
+                <option value="https://ppp-test.nuvei.com/ppp/api/v1/updateUser.do">TEST</option>
             </select>
 
         <input type="password" id="merchant_secret_key" name="merchant_secret_key" placeholder="Merchant Secret Key" required>
+
         <input type="text" id="merchant_id" name="merchant_id" placeholder="Merchant ID" required>
 
         <input type="text" id="merchant_site_id" name="merchant_site_id" placeholder="Merchant Site ID" required>
@@ -65,21 +43,6 @@
         <input type="text" id="userTokenId" name="userTokenId" placeholder="User Token ID" required>
 
         <input type="text" id="client_request_id" name="client_request_id" placeholder="Client Request ID" required>
-
-        <input type="text" id="firstName" name="firstName" placeholder="First Name" required>
-
-        <input type="text" id="lastName" name="lastName" placeholder="Last Name" required>
-
-        <input type="email" id="email" name="email" placeholder="Email" required>
-
-        <select id="countryCode" >
-          <option value="#">Country Code</option>
-          <option value="CO">Colombia</option>
-          <option value="MX">México</option>
-          <option value="PE">Perú</option>
-          <option value="US">EEUU</option>
-          <option value="AR">Argentina</option> 
-        </select>
 
         <input type="button" value="Enviar" onclick="obtenerDatos()">
     </form>
@@ -101,13 +64,9 @@ function obtenerDatos(){
     var merchant_secret_key =document.getElementById('merchant_secret_key').value;
     var client_request_id = document.getElementById('client_request_id').value;
     var userTokenId = document.getElementById('userTokenId').value;
-    var firstName = document.getElementById('firstName').value;
-    var lastName = document.getElementById('lastName').value;
-    var email = document.getElementById('email').value;
-    var countryCode = document.getElementById('countryCode').value;
 
-    if (!merchant_id || !merchant_site_id ||!userTokenId ||!client_request_id ||!firstName ||!lastName) {
-      alert("Por favor ingrese todos los campos");
+    if (!merchant_id || !merchant_site_id ||!userTokenId ||!client_request_id ||!merchant_secret_key) {
+      alert("Please fill all the fields!");
       return;
     }
   
@@ -118,24 +77,20 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
     return valor.toString().padStart(2, '0');
   }
 
-  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + client_request_id + timestamp + merchant_secret_key);
+  const cadena =CryptoJS.SHA256(merchant_id + merchant_site_id + user_token_id +  client_request_id + timestamp + merchant_secret_key);
   const checksum = cadena.toString();
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({  
-      "merchantId": merchant_id,
-      "merchantSiteId": merchant_site_id,
-      "userTokenId": userTokenId,
-      "clientRequestId": client_request_id,
-      "firstName": firstName,
-      "lastName": lastName,
-      "email":email ,
-      "countryCode": countryCode,
-      "timeStamp": timestamp,
-      "checksum": checksum
-    });
+    var raw = JSON.stringify({
+     "merchantId": merchant_id,
+     "merchantSiteId": merchant_site_id,
+     "clientRequestId": client_request_id,
+     "userTokenId": userTokenId,
+     "timeStamp": timestamp,
+     "checksum": checksum
+});
   
     var requestOptions = {
       method: 'POST',
@@ -156,7 +111,6 @@ const timestamp = `${fecha.getFullYear()}${padZero(fecha.getMonth() + 1)}${padZe
           alert("Something went wrong, review yours fields!"); 
 
         }
-
            
       })
       .catch(error => console.log('error', error));
